@@ -1,54 +1,46 @@
 package com.example.capucareapp.ui.viewmodel
 
+import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.capucareapp.data.model.Insumo
 import com.example.capucareapp.data.repository.InsumoRepository
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 
 class InsumoViewModel(private val repository: InsumoRepository) : ViewModel() {
 
-    // Manejo de estado para la interfaz gráfica
-    private val _estadoValidacion = MutableStateFlow<String?>(null)
-    val estadoValidacion: StateFlow<String?> = _estadoValidacion
+    val listaInsumos = mutableStateListOf<Insumo>()
 
-    // Lógica de validación centralizada y desacoplada[cite: 5]
+    init {
+        cargarInventario()
+    }
+
+    fun cargarInventario() {
+        listaInsumos.clear()
+        listaInsumos.addAll(repository.obtenerInventario())
+    }
+
     fun registrarNuevoInsumo(
-        id: String, nombre: String, categoria: String, cantidad: String,
-        unidad: String, minimo: String, ubicacion: String
+        id: String,
+        nombre: String,
+        descripcion: String,
+        categoria: String,
+        cantidad: String,
+        unidad: String,
+        minimo: String,
+        ubicacion: String,
+        estado: String
     ) {
-        if (id.isBlank() || nombre.isBlank() || cantidad.isBlank()) {
-            _estadoValidacion.value = "Error: ID, Nombre y Cantidad son campos obligatorios."
-            return
-        }
-
-        val cantidadInt = cantidad.toIntOrNull()
-        val minimoInt = minimo.toIntOrNull() ?: 0
-
-        if (cantidadInt == null || cantidadInt < 0) {
-            _estadoValidacion.value = "Error: La cantidad debe ser un número válido mayor a cero."
-            return
-        }
-
-        // Si pasa las validaciones, creamos el objeto
-        val nuevoInsumo = Insumo(
-            idProducto = id,
-            nombreDescripcion = nombre,
+        val insumo = Insumo(
+            id = id,
+            nombre = nombre,
+            descripcion = descripcion,
             categoria = categoria,
-            cantidadDisponible = cantidadInt,
-            unidadMedida = unidad,
-            nivelMinimo = minimoInt,
+            cantidad = cantidad.toIntOrNull() ?: 0,
+            unidad = unidad,
+            minimo = minimo.toIntOrNull() ?: 0,
             ubicacion = ubicacion,
-            estado = "Activo"
+            estado = estado
         )
-
-        // Guardamos en la base de datos de forma asíncrona
-        viewModelScope.launch {
-            repository.insertarInsumo(nuevoInsumo)
-            _estadoValidacion.value = "¡Insumo médico registrado correctamente!"
-        }
+        repository.insertarInsumo(insumo)
+        cargarInventario() // Actualiza la lista automáticamente al guardar
     }
 }
-

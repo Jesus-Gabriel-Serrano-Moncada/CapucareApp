@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.example.capucareapp.data.model.Insumo
 import com.example.capucareapp.data.model.Movimiento
 
-@Database(entities = [Insumo::class, Movimiento::class], version = 1, exportSchema = false)
+@Database(entities = [Insumo::class, Movimiento::class], version = 2, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun insumoDao(): InsumoDao
@@ -22,7 +22,11 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "cappucare_database"
-                ).build()
+                )
+                    .fallbackToDestructiveMigration()
+                    .allowMainThreadQueries()
+                    .build()
+
                 INSTANCE = instance
                 instance
             }
