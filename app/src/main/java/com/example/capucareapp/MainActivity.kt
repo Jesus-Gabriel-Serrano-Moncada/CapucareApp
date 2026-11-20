@@ -20,16 +20,17 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val factory = object : ViewModelProvider.Factory {
-                @Suppress("UNCHECKED_CAST") // Esto elimina la advertencia amarilla del cast
+                @Suppress("UNCHECKED_CAST")
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
                     return InsumoViewModel(repository) as T
                 }
             }
 
-            // Le cambiamos el nombre a "insumoViewModel" para que sea más claro
-            val insumoViewModel: InsumoViewModel = viewModel(factory = factory)
+            val insumoViewModel: InsumoViewModel =
+                viewModel(factory = factory)
 
             MainContainerScreen(viewModel = insumoViewModel)
         }
     }
 }
+

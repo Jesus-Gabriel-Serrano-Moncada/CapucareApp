@@ -1,3 +1,50 @@
+
 <resources>
     <string name="app_name">CapucareApp</string>
+
+    <!-- Navegación -->
+    <string name="nav_registro">Registro</string>
+    <string name="nav_inventario">Inventario</string>
+
+    <!-- Registro de insumos -->
+    <string name="registro_titulo">Registrar Insumo</string>
+    <string name="escanear_codigo">Escanear Código</string>
+    <string name="codigo_insumo">Código del insumo</string>
+    <string name="nombre">Nombre</string>
+    <string name="descripcion">Descripción</string>
+    <string name="cantidad">Cantidad</string>
+    <string name="stock_minimo">Stock mínimo</string>
+    <string name="estado">Estado</string>
+    <string name="imagen_insumo">Imagen del insumo</string>
+    <string name="url_imagen">URL de la imagen (opcional)</string>
+    <string name="guardar_insumo">Guardar Insumo</string>
+
+    <!-- Mensajes -->
+    <string name="error_codigo_obligatorio">El código es obligatorio.</string>
+    <string name="error_nombre_obligatorio">El nombre es obligatorio.</string>
+    <string name="error_codigo_duplicado">Ya existe un insumo con ese código.</string>
+    <string name="error_cantidad">Ingresa una cantidad válida.</string>
+    <string name="error_minimo">Ingresa un stock mínimo válido.</string>
+    <string name="error_estado">El estado es obligatorio.</string>
+    <string name="error_url_imagen">La URL de imagen debe comenzar con http:// o https://.</string>
+    <string name="registro_exitoso">Insumo registrado correctamente.</string>
+    <string name="error_carga_imagen">No se pudo cargar la imagen</string>
+    <string name="sin_imagen">Sin imagen disponible</string>
+
+    <!-- Inventario -->
+    <string name="inventario_titulo">Inventario de Insumos Médicos</string>
+    <string name="total_insumos">Total de insumos</string>
+    <string name="stock_critico">Stock crítico</string>
+    <string name="insumos_registrados">Insumos registrados</string>
+    <string name="sin_insumos">No hay insumos registrados en la base de datos.</string>
+    <string name="codigo">Código: %1$s</string>
+    <string name="ubicacion">Ubicación: %1$s</string>
+    <string name="descripcion_insumo">Descripción: %1$s</string>
+    <string name="disponible">Disponible: %1$d %2$s</string>
+    <string name="stock_minimo_detalle">Stock mínimo: %1$d</string>
+    <string name="stock_critico_estado">STOCK CRÍTICO</string>
+
+    <!-- Notificaciones -->
+    <string name="notificacion_stock_titulo">Stock crítico</string>
+    <string name="notificacion_stock_mensaje">El insumo %1$s tiene stock bajo.</string>
 </resources>

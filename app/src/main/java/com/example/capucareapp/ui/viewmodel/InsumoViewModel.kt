@@ -27,7 +27,8 @@ class InsumoViewModel(private val repository: InsumoRepository) : ViewModel() {
         unidad: String,
         minimo: String,
         ubicacion: String,
-        estado: String
+        estado: String,
+        imagenUrl: String? = null
     ) {
         val insumo = Insumo(
             id = id,
@@ -38,9 +39,11 @@ class InsumoViewModel(private val repository: InsumoRepository) : ViewModel() {
             unidad = unidad,
             minimo = minimo.toIntOrNull() ?: 0,
             ubicacion = ubicacion,
-            estado = estado
+            estado = estado,
+            imagenUrl = imagenUrl
         )
+
         repository.insertarInsumo(insumo)
-        cargarInventario() // Actualiza la lista automáticamente al guardar
+        cargarInventario()
     }
 }
