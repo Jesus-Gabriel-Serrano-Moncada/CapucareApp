@@ -1,7 +1,13 @@
+
 <resources>
     <string name="app_name">CapucareApp</string>
+
+    <!-- Navigation -->
     <string name="nav_registro">Registration</string>
     <string name="nav_inventario">Inventory</string>
+    <string name="nav_indicadores">Indicators</string>
+
+    <!-- Supply registration -->
     <string name="registro_titulo">Register Supply</string>
     <string name="escanear_codigo">Scan Code</string>
     <string name="codigo_insumo">Supply Code</string>
@@ -13,6 +19,8 @@
     <string name="imagen_insumo">Supply Image</string>
     <string name="url_imagen">Image URL (optional)</string>
     <string name="guardar_insumo">Save Supply</string>
+
+    <!-- Messages -->
     <string name="error_codigo_obligatorio">Code is required.</string>
     <string name="error_nombre_obligatorio">Name is required.</string>
     <string name="error_codigo_duplicado">A supply with this code already exists.</string>
@@ -23,6 +31,8 @@
     <string name="registro_exitoso">Supply registered successfully.</string>
     <string name="error_carga_imagen">Could not load image</string>
     <string name="sin_imagen">No image available</string>
+
+    <!-- Inventory -->
     <string name="inventario_titulo">Medical Supplies Inventory</string>
     <string name="total_insumos">Total Supplies</string>
     <string name="stock_critico">Critical Stock</string>
@@ -34,6 +44,18 @@
     <string name="disponible">Available: %1$d %2$s</string>
     <string name="stock_minimo_detalle">Minimum stock: %1$d</string>
     <string name="stock_critico_estado">CRITICAL STOCK</string>
+
+    <!-- Notifications -->
     <string name="notificacion_stock_titulo">Critical Stock</string>
     <string name="notificacion_stock_mensaje">Supply %1$s has low stock.</string>
+
+    <!-- Economic indicators -->
+    <string name="indicadores_titulo">Economic Indicators</string>
+    <string name="indicadores_subtitulo">Economic information from Chile provided by Mindicador.cl</string>
+    <string name="indicadores_cargando">Loading indicators...</string>
+    <string name="indicadores_error">Unable to retrieve economic indicators.</string>
+    <string name="indicadores_reintentar">Retry</string>
+    <string name="indicadores_vacios">No indicators available.</string>
+    <string name="indicadores_unidad">Unit: %1$s</string>
+    <string name="indicadores_fecha">Date: %1$s</string>
 </resources>

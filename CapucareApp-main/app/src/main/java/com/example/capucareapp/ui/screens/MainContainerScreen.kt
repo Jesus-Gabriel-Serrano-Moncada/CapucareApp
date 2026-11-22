@@ -15,10 +15,14 @@ import coil3.compose.SubcomposeAsyncImage
 import coil3.compose.SubcomposeAsyncImageContent
 import com.example.capucareapp.R
 import com.example.capucareapp.data.model.Insumo
+import com.example.capucareapp.ui.viewmodel.IndicadoresViewModel
 import com.example.capucareapp.ui.viewmodel.InsumoViewModel
 
 @Composable
-fun MainContainerScreen(viewModel: InsumoViewModel) {
+fun MainContainerScreen(
+    viewModel: InsumoViewModel,
+    indicadoresViewModel: IndicadoresViewModel
+) {
     var tabIndex by remember { mutableIntStateOf(0) }
 
     Scaffold(
@@ -54,6 +58,23 @@ fun MainContainerScreen(viewModel: InsumoViewModel) {
                         Text(stringResource(R.string.nav_inventario))
                     }
                 )
+
+                NavigationBarItem(
+                    selected = tabIndex == 2,
+                    onClick = {
+                        indicadoresViewModel.cargarIndicadores()
+                        tabIndex = 2
+                    },
+                    icon = {
+                        Text(
+                            text = "$",
+                            style = MaterialTheme.typography.headlineSmall
+                        )
+                    },
+                    label = {
+                        Text(stringResource(R.string.nav_indicadores))
+                    }
+                )
             }
         }
     ) { innerPadding ->
@@ -65,6 +86,7 @@ fun MainContainerScreen(viewModel: InsumoViewModel) {
             when (tabIndex) {
                 0 -> RegistroInsumoScreen(viewModel = viewModel)
                 1 -> ConsultaInventarioScreen(viewModel = viewModel)
+                2 -> IndicadoresScreen(viewModel = indicadoresViewModel)
             }
         }
     }
