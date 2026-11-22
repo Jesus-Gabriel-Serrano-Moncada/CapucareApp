@@ -194,6 +194,12 @@ fun ConsultaInventarioScreen(viewModel: InsumoViewModel) {
 fun ItemInsumoCard(insumo: Insumo) {
     val esCritico = insumo.cantidad <= insumo.minimo
 
+    val estadoTraducido = when (insumo.estado.trim().uppercase()) {
+        "ACTIVO" -> stringResource(R.string.estado_activo)
+        "INACTIVO" -> stringResource(R.string.estado_inactivo)
+        else -> insumo.estado
+    }
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
@@ -270,7 +276,7 @@ fun ItemInsumoCard(insumo: Insumo) {
                     text = if (esCritico) {
                         stringResource(R.string.stock_critico_estado)
                     } else {
-                        insumo.estado
+                        estadoTraducido
                     },
                     color = if (esCritico) Color.Red else Color.DarkGray,
                     style = MaterialTheme.typography.labelSmall

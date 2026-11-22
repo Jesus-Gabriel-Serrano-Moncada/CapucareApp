@@ -16,6 +16,8 @@
     <string name="cantidad">Cantidad</string>
     <string name="stock_minimo">Stock mínimo</string>
     <string name="estado">Estado</string>
+    <string name="estado_activo">Activo</string>
+    <string name="estado_inactivo">Inactivo</string>
     <string name="imagen_insumo">Imagen del insumo</string>
     <string name="url_imagen">URL de la imagen (opcional)</string>
     <string name="guardar_insumo">Guardar Insumo</string>

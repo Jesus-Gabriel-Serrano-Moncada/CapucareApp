@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -33,7 +34,8 @@ fun RegistroInsumoScreen(viewModel: InsumoViewModel) {
     var descripcion by remember { mutableStateOf("") }
     var cantidad by remember { mutableStateOf("") }
     var minimo by remember { mutableStateOf("") }
-    var estado by remember { mutableStateOf("Activo") }
+    var estado by remember { mutableStateOf("ACTIVO") }
+    var estadoExpandido by remember { mutableStateOf(false) }
     var imagenUrl by remember { mutableStateOf("") }
     var mensajeError by remember { mutableStateOf("") }
     var mensajeExito by remember { mutableStateOf("") }
@@ -53,7 +55,6 @@ fun RegistroInsumoScreen(viewModel: InsumoViewModel) {
     val errorDuplicado = stringResource(R.string.error_codigo_duplicado)
     val errorCantidad = stringResource(R.string.error_cantidad)
     val errorMinimo = stringResource(R.string.error_minimo)
-    val errorEstado = stringResource(R.string.error_estado)
     val errorUrl = stringResource(R.string.error_url_imagen)
     val registroExitoso = stringResource(R.string.registro_exitoso)
     val tituloNotificacion = stringResource(R.string.notificacion_stock_titulo)
@@ -138,12 +139,67 @@ fun RegistroInsumoScreen(viewModel: InsumoViewModel) {
             modifier = Modifier.fillMaxWidth()
         )
 
-        OutlinedTextField(
-            value = estado,
-            onValueChange = { estado = it },
-            label = { Text(stringResource(R.string.estado)) },
-            modifier = Modifier.fillMaxWidth()
-        )
+        // Selector de estado
+        Box(modifier = Modifier.fillMaxWidth()) {
+            OutlinedTextField(
+                value = if (estado == "ACTIVO") {
+                    stringResource(R.string.estado_activo)
+                } else {
+                    stringResource(R.string.estado_inactivo)
+                },
+                onValueChange = {},
+                readOnly = true,
+                enabled = false,
+                label = {
+                    Text(stringResource(R.string.estado))
+                },
+                trailingIcon = {
+                    Text("▼")
+                },
+                modifier = Modifier.fillMaxWidth(),
+                colors = OutlinedTextFieldDefaults.colors(
+                    disabledTextColor = MaterialTheme.colorScheme.onSurface,
+                    disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    disabledBorderColor = MaterialTheme.colorScheme.outline,
+                    disabledTrailingIconColor = MaterialTheme.colorScheme.onSurface
+                )
+            )
+
+            Box(
+                modifier = Modifier
+                    .matchParentSize()
+                    .clickable {
+                        estadoExpandido = true
+                    }
+            )
+
+            DropdownMenu(
+                expanded = estadoExpandido,
+                onDismissRequest = {
+                    estadoExpandido = false
+                }
+            ) {
+                DropdownMenuItem(
+                    text = {
+                        Text(stringResource(R.string.estado_activo))
+                    },
+                    onClick = {
+                        estado = "ACTIVO"
+                        estadoExpandido = false
+                    }
+                )
+
+                DropdownMenuItem(
+                    text = {
+                        Text(stringResource(R.string.estado_inactivo))
+                    },
+                    onClick = {
+                        estado = "INACTIVO"
+                        estadoExpandido = false
+                    }
+                )
+            }
+        }
 
         HorizontalDivider()
 
@@ -162,7 +218,10 @@ fun RegistroInsumoScreen(viewModel: InsumoViewModel) {
             singleLine = true
         )
 
-        if (imagenUrl.startsWith("https://") || imagenUrl.startsWith("http://")) {
+        if (
+            imagenUrl.startsWith("https://") ||
+            imagenUrl.startsWith("http://")
+        ) {
             AsyncImage(
                 model = imagenUrl,
                 contentDescription = stringResource(R.string.imagen_insumo),
@@ -210,9 +269,6 @@ fun RegistroInsumoScreen(viewModel: InsumoViewModel) {
                     minimo.toIntOrNull() == null ->
                         mensajeError = errorMinimo
 
-                    estado.isBlank() ->
-                        mensajeError = errorEstado
-
                     imagenUrl.isNotBlank() &&
                             !imagenUrl.startsWith("https://") &&
                             !imagenUrl.startsWith("http://") ->
@@ -231,7 +287,7 @@ fun RegistroInsumoScreen(viewModel: InsumoViewModel) {
                             "Unidades",
                             minimo,
                             "Almacén",
-                            estado.trim(),
+                            estado,
                             imagenUrl.trim().takeIf { it.isNotBlank() }
                         )
 
@@ -249,7 +305,7 @@ fun RegistroInsumoScreen(viewModel: InsumoViewModel) {
                         descripcion = ""
                         cantidad = ""
                         minimo = ""
-                        estado = "Activo"
+                        estado = "ACTIVO"
                         imagenUrl = ""
                     }
                 }
