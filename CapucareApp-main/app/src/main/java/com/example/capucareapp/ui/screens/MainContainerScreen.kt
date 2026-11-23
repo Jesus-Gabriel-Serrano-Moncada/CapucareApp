@@ -1,7 +1,7 @@
-
 package com.example.capucareapp.ui.screens
 
 import android.content.res.Configuration
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -28,9 +28,11 @@ fun MainContainerScreen(
     indicadoresViewModel: IndicadoresViewModel
 ) {
     var tabIndex by remember { mutableIntStateOf(0) }
+    var insumoSeleccionado by remember { mutableStateOf<Insumo?>(null) }
 
     val configuracion = LocalConfiguration.current
-    val horizontal = configuracion.orientation == Configuration.ORIENTATION_LANDSCAPE
+    val horizontal =
+        configuracion.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     Scaffold(
         bottomBar = {
@@ -42,7 +44,10 @@ fun MainContainerScreen(
             ) {
                 NavigationBarItem(
                     selected = tabIndex == 0,
-                    onClick = { tabIndex = 0 },
+                    onClick = {
+                        tabIndex = 0
+                        insumoSeleccionado = null
+                    },
                     icon = {
                         Text(
                             text = "＋",
@@ -82,6 +87,7 @@ fun MainContainerScreen(
                     onClick = {
                         indicadoresViewModel.cargarIndicadores()
                         tabIndex = 2
+                        insumoSeleccionado = null
                     },
                     icon = {
                         Text(
@@ -96,6 +102,28 @@ fun MainContainerScreen(
                         )
                     }
                 )
+
+                NavigationBarItem(
+                    selected = tabIndex == 3,
+                    onClick = {
+                        viewModel.cargarInventario()
+                        viewModel.cargarHistorial()
+                        tabIndex = 3
+                        insumoSeleccionado = null
+                    },
+                    icon = {
+                        Text(
+                            text = "↔",
+                            fontSize = if (horizontal) 18.sp else 24.sp
+                        )
+                    },
+                    label = {
+                        Text(
+                            stringResource(R.string.nav_historial),
+                            fontSize = if (horizontal) 10.sp else 12.sp
+                        )
+                    }
+                )
             }
         }
     ) { innerPadding ->
@@ -106,15 +134,43 @@ fun MainContainerScreen(
         ) {
             when (tabIndex) {
                 0 -> RegistroInsumoScreen(viewModel = viewModel)
-                1 -> ConsultaInventarioScreen(viewModel = viewModel)
-                2 -> IndicadoresScreen(viewModel = indicadoresViewModel)
+
+                1 -> {
+                    if (insumoSeleccionado == null) {
+                        ConsultaInventarioScreen(
+                            viewModel = viewModel,
+                            onSeleccionarInsumo = { insumo ->
+                                insumoSeleccionado = insumo
+                            }
+                        )
+                    } else {
+                        DetalleInsumoScreen(
+                            insumo = insumoSeleccionado!!,
+                            viewModel = viewModel,
+                            onVolver = {
+                                insumoSeleccionado = null
+                            }
+                        )
+                    }
+                }
+
+                2 -> IndicadoresScreen(
+                    viewModel = indicadoresViewModel
+                )
+
+                3 -> HistorialScreen(
+                    viewModel = viewModel
+                )
             }
         }
     }
 }
 
 @Composable
-fun ConsultaInventarioScreen(viewModel: InsumoViewModel) {
+fun ConsultaInventarioScreen(
+    viewModel: InsumoViewModel,
+    onSeleccionarInsumo: (Insumo) -> Unit
+) {
     val totalInsumos = viewModel.listaInsumos.size
 
     val insumosCriticos = viewModel.listaInsumos.count {
@@ -204,7 +260,12 @@ fun ConsultaInventarioScreen(viewModel: InsumoViewModel) {
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 items(viewModel.listaInsumos) { insumo ->
-                    ItemInsumoCard(insumo = insumo)
+                    ItemInsumoCard(
+                        insumo = insumo,
+                        onClick = {
+                            onSeleccionarInsumo(insumo)
+                        }
+                    )
                 }
             }
         }
@@ -212,7 +273,10 @@ fun ConsultaInventarioScreen(viewModel: InsumoViewModel) {
 }
 
 @Composable
-fun ItemInsumoCard(insumo: Insumo) {
+fun ItemInsumoCard(
+    insumo: Insumo,
+    onClick: () -> Unit = {}
+) {
     val esCritico = insumo.cantidad <= insumo.minimo
 
     val estadoTraducido = when (insumo.estado.trim().uppercase()) {
@@ -222,7 +286,9 @@ fun ItemInsumoCard(insumo: Insumo) {
     }
 
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() },
         colors = CardDefaults.cardColors(
             containerColor = if (esCritico) {
                 Color(0xFFFFEBEE)
@@ -317,7 +383,10 @@ fun ItemInsumoCard(insumo: Insumo) {
             )
 
             Text(
-                text = stringResource(R.string.descripcion_insumo, insumo.descripcion),
+                text = stringResource(
+                    R.string.descripcion_insumo,
+                    insumo.descripcion
+                ),
                 style = MaterialTheme.typography.bodyMedium
             )
 
@@ -338,6 +407,14 @@ fun ItemInsumoCard(insumo: Insumo) {
                     insumo.minimo
                 ),
                 style = MaterialTheme.typography.bodySmall
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = "Toca para ver los detalles",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.primary
             )
         }
     }

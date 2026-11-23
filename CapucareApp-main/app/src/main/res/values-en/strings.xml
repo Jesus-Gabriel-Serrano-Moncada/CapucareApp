@@ -1,6 +1,6 @@
-
 <resources>
     <string name="app_name">CapucareApp</string>
+    <string name="nav_historial">History</string>
 
     <!-- Navigation -->
     <string name="nav_registro">Registration</string>
@@ -21,6 +21,44 @@
     <string name="imagen_insumo">Supply Image</string>
     <string name="url_imagen">Image URL (optional)</string>
     <string name="guardar_insumo">Save Supply</string>
+
+
+    <!-- Movement history -->
+    <string name="historial_titulo">Movement History</string>
+    <string name="historial_subtitulo">View registered stock entries and withdrawals.</string>
+    <string name="historial_vacio">There are no registered movements yet.</string>
+    <string name="historial_entrada">ENTRY: +%1$d</string>
+    <string name="historial_salida">WITHDRAWAL: -%1$d</string>
+    <string name="historial_motivo">Reason: %1$s</string>
+    <string name="historial_responsable">Responsible: %1$s</string>
+    <string name="historial_fecha">Date: %1$s</string>
+
+    <!-- Supply details -->
+    <string name="detalle_volver">← Back to inventory</string>
+    <string name="detalle_titulo">Supply Details</string>
+    <string name="detalle_imagen">Supply image</string>
+    <string name="detalle_error_imagen">Could not load the image.</string>
+    <string name="detalle_codigo">Code: %1$s</string>
+    <string name="detalle_categoria">Category: %1$s</string>
+    <string name="detalle_descripcion">Description: %1$s</string>
+    <string name="detalle_ubicacion">Location: %1$s</string>
+    <string name="detalle_estado">Status: %1$s</string>
+    <string name="detalle_unidad">Unit: %1$s</string>
+    <string name="detalle_stock">Available stock</string>
+    <string name="detalle_stock_cantidad">%1$d %2$s</string>
+    <string name="detalle_stock_minimo">Minimum stock: %1$d</string>
+    <string name="detalle_gestionar">Manage inventory</string>
+    <string name="detalle_entrada">Entry</string>
+    <string name="detalle_salida">Withdrawal</string>
+    <string name="detalle_cantidad">Quantity</string>
+    <string name="detalle_motivo">Movement reason</string>
+    <string name="detalle_cantidad_error">Enter a valid quantity.</string>
+    <string name="detalle_motivo_error">Enter the movement reason.</string>
+    <string name="detalle_exito">Movement registered successfully.</string>
+    <string name="detalle_stock_insuficiente">There is not enough stock for this withdrawal.</string>
+    <string name="detalle_error_registro">Could not register the movement.</string>
+    <string name="detalle_confirmar">Confirm movement</string>
+
 
     <!-- Messages -->
     <string name="error_codigo_obligatorio">Code is required.</string>

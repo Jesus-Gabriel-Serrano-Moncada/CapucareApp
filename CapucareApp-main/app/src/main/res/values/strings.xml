@@ -1,6 +1,6 @@
-
 <resources>
     <string name="app_name">CapucareApp</string>
+    <string name="nav_historial">Historial</string>
 
     <!-- Navegación -->
     <string name="nav_registro">Registro</string>
@@ -21,6 +21,43 @@
     <string name="imagen_insumo">Imagen del insumo</string>
     <string name="url_imagen">URL de la imagen (opcional)</string>
     <string name="guardar_insumo">Guardar Insumo</string>
+
+
+    <!-- Historial de movimientos -->
+    <string name="historial_titulo">Historial de movimientos</string>
+    <string name="historial_subtitulo">Consulta las entradas y salidas registradas.</string>
+    <string name="historial_vacio">Todavía no hay movimientos registrados.</string>
+    <string name="historial_entrada">ENTRADA: +%1$d</string>
+    <string name="historial_salida">SALIDA: -%1$d</string>
+    <string name="historial_motivo">Motivo: %1$s</string>
+    <string name="historial_responsable">Responsable: %1$s</string>
+    <string name="historial_fecha">Fecha: %1$s</string>
+
+    <!-- Detalle del insumo -->
+    <string name="detalle_volver">← Volver al inventario</string>
+    <string name="detalle_titulo">Detalle del insumo</string>
+    <string name="detalle_imagen">Imagen del insumo</string>
+    <string name="detalle_error_imagen">No se pudo cargar la imagen.</string>
+    <string name="detalle_codigo">Código: %1$s</string>
+    <string name="detalle_categoria">Categoría: %1$s</string>
+    <string name="detalle_descripcion">Descripción: %1$s</string>
+    <string name="detalle_ubicacion">Ubicación: %1$s</string>
+    <string name="detalle_estado">Estado: %1$s</string>
+    <string name="detalle_unidad">Unidad: %1$s</string>
+    <string name="detalle_stock">Stock disponible</string>
+    <string name="detalle_stock_cantidad">%1$d %2$s</string>
+    <string name="detalle_stock_minimo">Stock mínimo: %1$d</string>
+    <string name="detalle_gestionar">Gestionar inventario</string>
+    <string name="detalle_entrada">Entrada</string>
+    <string name="detalle_salida">Salida</string>
+    <string name="detalle_cantidad">Cantidad</string>
+    <string name="detalle_motivo">Motivo del movimiento</string>
+    <string name="detalle_cantidad_error">Ingresa una cantidad válida.</string>
+    <string name="detalle_motivo_error">Ingresa el motivo del movimiento.</string>
+    <string name="detalle_exito">Movimiento registrado correctamente.</string>
+    <string name="detalle_stock_insuficiente">No hay stock suficiente para esta salida.</string>
+    <string name="detalle_error_registro">No se pudo registrar el movimiento.</string>
+    <string name="detalle_confirmar">Confirmar movimiento</string>
 
     <!-- Mensajes -->
     <string name="error_codigo_obligatorio">El código es obligatorio.</string>
