@@ -1,5 +1,7 @@
+
 package com.example.capucareapp.ui.screens
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -9,8 +11,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil3.compose.SubcomposeAsyncImage
 import coil3.compose.SubcomposeAsyncImageContent
 import com.example.capucareapp.R
@@ -25,20 +29,31 @@ fun MainContainerScreen(
 ) {
     var tabIndex by remember { mutableIntStateOf(0) }
 
+    val configuracion = LocalConfiguration.current
+    val horizontal = configuracion.orientation == Configuration.ORIENTATION_LANDSCAPE
+
     Scaffold(
         bottomBar = {
-            NavigationBar {
+            NavigationBar(
+                modifier = Modifier.height(
+                    if (horizontal) 76.dp else 80.dp
+                ),
+                windowInsets = WindowInsets(0.dp)
+            ) {
                 NavigationBarItem(
                     selected = tabIndex == 0,
                     onClick = { tabIndex = 0 },
                     icon = {
                         Text(
                             text = "＋",
-                            style = MaterialTheme.typography.headlineSmall
+                            fontSize = if (horizontal) 18.sp else 24.sp
                         )
                     },
                     label = {
-                        Text(stringResource(R.string.nav_registro))
+                        Text(
+                            stringResource(R.string.nav_registro),
+                            fontSize = if (horizontal) 10.sp else 12.sp
+                        )
                     }
                 )
 
@@ -51,11 +66,14 @@ fun MainContainerScreen(
                     icon = {
                         Text(
                             text = "▤",
-                            style = MaterialTheme.typography.headlineSmall
+                            fontSize = if (horizontal) 18.sp else 24.sp
                         )
                     },
                     label = {
-                        Text(stringResource(R.string.nav_inventario))
+                        Text(
+                            stringResource(R.string.nav_inventario),
+                            fontSize = if (horizontal) 10.sp else 12.sp
+                        )
                     }
                 )
 
@@ -68,11 +86,14 @@ fun MainContainerScreen(
                     icon = {
                         Text(
                             text = "$",
-                            style = MaterialTheme.typography.headlineSmall
+                            fontSize = if (horizontal) 18.sp else 24.sp
                         )
                     },
                     label = {
-                        Text(stringResource(R.string.nav_indicadores))
+                        Text(
+                            stringResource(R.string.nav_indicadores),
+                            fontSize = if (horizontal) 10.sp else 12.sp
+                        )
                     }
                 )
             }
