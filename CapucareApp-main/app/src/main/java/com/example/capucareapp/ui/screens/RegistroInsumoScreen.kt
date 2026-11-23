@@ -1,3 +1,4 @@
+
 package com.example.capucareapp.ui.screens
 
 import android.Manifest
@@ -37,7 +38,8 @@ fun RegistroInsumoScreen(viewModel: InsumoViewModel) {
     var estado by remember { mutableStateOf("ACTIVO") }
     var estadoExpandido by remember { mutableStateOf(false) }
     var imagenUrl by remember { mutableStateOf("") }
-    var mensajeError by remember { mutableStateOf("") }
+
+    var intentoGuardar by remember { mutableStateOf(false) }
     var mensajeExito by remember { mutableStateOf("") }
 
     val scanner = GmsBarcodeScanning.getClient(context)
@@ -58,10 +60,24 @@ fun RegistroInsumoScreen(viewModel: InsumoViewModel) {
     val errorUrl = stringResource(R.string.error_url_imagen)
     val registroExitoso = stringResource(R.string.registro_exitoso)
     val tituloNotificacion = stringResource(R.string.notificacion_stock_titulo)
+
     val mensajeNotificacion = stringResource(
         R.string.notificacion_stock_mensaje,
         nombre
     )
+
+    val codigoDuplicado = viewModel.listaInsumos.any {
+        it.id == id.trim()
+    }
+
+    val codigoInvalido = id.isBlank() || codigoDuplicado
+    val nombreInvalido = nombre.isBlank()
+    val cantidadInvalida = cantidad.toIntOrNull() == null
+    val minimoInvalido = minimo.toIntOrNull() == null
+
+    val urlInvalida = imagenUrl.isNotBlank() &&
+            !imagenUrl.trim().startsWith("https://", ignoreCase = true) &&
+            !imagenUrl.trim().startsWith("http://", ignoreCase = true)
 
     LaunchedEffect(Unit) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -94,6 +110,7 @@ fun RegistroInsumoScreen(viewModel: InsumoViewModel) {
                     .addOnSuccessListener { barcode ->
                         barcode.rawValue?.let {
                             id = it
+                            mensajeExito = ""
                         }
                     }
             },
@@ -104,38 +121,90 @@ fun RegistroInsumoScreen(viewModel: InsumoViewModel) {
 
         OutlinedTextField(
             value = id,
-            onValueChange = { id = it },
-            label = { Text(stringResource(R.string.codigo_insumo)) },
+            onValueChange = {
+                id = it
+                mensajeExito = ""
+            },
+            label = {
+                Text(stringResource(R.string.codigo_insumo) + " *")
+            },
+            isError = intentoGuardar && codigoInvalido,
+            supportingText = {
+                if (intentoGuardar && codigoInvalido) {
+                    Text(
+                        if (id.isBlank()) errorCodigo else errorDuplicado
+                    )
+                }
+            },
             modifier = Modifier.fillMaxWidth()
         )
 
         OutlinedTextField(
             value = nombre,
-            onValueChange = { nombre = it },
-            label = { Text(stringResource(R.string.nombre)) },
+            onValueChange = {
+                nombre = it
+                mensajeExito = ""
+            },
+            label = {
+                Text(stringResource(R.string.nombre) + " *")
+            },
+            isError = intentoGuardar && nombreInvalido,
+            supportingText = {
+                if (intentoGuardar && nombreInvalido) {
+                    Text(errorNombre)
+                }
+            },
             modifier = Modifier.fillMaxWidth()
         )
 
         OutlinedTextField(
             value = descripcion,
             onValueChange = { descripcion = it },
-            label = { Text(stringResource(R.string.descripcion)) },
+            label = {
+                Text(stringResource(R.string.descripcion))
+            },
             modifier = Modifier.fillMaxWidth()
         )
 
         OutlinedTextField(
             value = cantidad,
-            onValueChange = { cantidad = it.filter(Char::isDigit) },
-            label = { Text(stringResource(R.string.cantidad)) },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            onValueChange = {
+                cantidad = it.filter(Char::isDigit)
+                mensajeExito = ""
+            },
+            label = {
+                Text(stringResource(R.string.cantidad) + " *")
+            },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Number
+            ),
+            isError = intentoGuardar && cantidadInvalida,
+            supportingText = {
+                if (intentoGuardar && cantidadInvalida) {
+                    Text(errorCantidad)
+                }
+            },
             modifier = Modifier.fillMaxWidth()
         )
 
         OutlinedTextField(
             value = minimo,
-            onValueChange = { minimo = it.filter(Char::isDigit) },
-            label = { Text(stringResource(R.string.stock_minimo)) },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            onValueChange = {
+                minimo = it.filter(Char::isDigit)
+                mensajeExito = ""
+            },
+            label = {
+                Text(stringResource(R.string.stock_minimo) + " *")
+            },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Number
+            ),
+            isError = intentoGuardar && minimoInvalido,
+            supportingText = {
+                if (intentoGuardar && minimoInvalido) {
+                    Text(errorMinimo)
+                }
+            },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -210,17 +279,32 @@ fun RegistroInsumoScreen(viewModel: InsumoViewModel) {
 
         OutlinedTextField(
             value = imagenUrl,
-            onValueChange = { imagenUrl = it },
-            label = { Text(stringResource(R.string.url_imagen)) },
-            placeholder = { Text("https://ejemplo.com/imagen.jpg") },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri),
+            onValueChange = {
+                imagenUrl = it
+                mensajeExito = ""
+            },
+            label = {
+                Text(stringResource(R.string.url_imagen))
+            },
+            placeholder = {
+                Text("https://ejemplo.com/imagen.jpg")
+            },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Uri
+            ),
+            isError = intentoGuardar && urlInvalida,
+            supportingText = {
+                if (intentoGuardar && urlInvalida) {
+                    Text(errorUrl)
+                }
+            },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )
 
         if (
-            imagenUrl.startsWith("https://") ||
-            imagenUrl.startsWith("http://")
+            imagenUrl.trim().startsWith("https://", ignoreCase = true) ||
+            imagenUrl.trim().startsWith("http://", ignoreCase = true)
         ) {
             AsyncImage(
                 model = imagenUrl,
@@ -232,10 +316,17 @@ fun RegistroInsumoScreen(viewModel: InsumoViewModel) {
             )
         }
 
-        if (mensajeError.isNotEmpty()) {
+        if (intentoGuardar && (
+                    codigoInvalido ||
+                            nombreInvalido ||
+                            cantidadInvalida ||
+                            minimoInvalido ||
+                            urlInvalida
+                    )) {
             Text(
-                text = mensajeError,
-                color = MaterialTheme.colorScheme.error
+                text = stringResource(R.string.validacion_campos_error),
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodyMedium
             )
         }
 
@@ -248,66 +339,50 @@ fun RegistroInsumoScreen(viewModel: InsumoViewModel) {
 
         Button(
             onClick = {
-                mensajeError = ""
+                intentoGuardar = true
                 mensajeExito = ""
 
-                when {
-                    id.isBlank() ->
-                        mensajeError = errorCodigo
+                val formularioValido =
+                    !codigoInvalido &&
+                            !nombreInvalido &&
+                            !cantidadInvalida &&
+                            !minimoInvalido &&
+                            !urlInvalida
 
-                    nombre.isBlank() ->
-                        mensajeError = errorNombre
+                if (formularioValido) {
+                    val cant = cantidad.toInt()
+                    val min = minimo.toInt()
 
-                    viewModel.listaInsumos.any {
-                        it.id == id.trim()
-                    } ->
-                        mensajeError = errorDuplicado
+                    viewModel.registrarNuevoInsumo(
+                        id.trim(),
+                        nombre.trim(),
+                        descripcion.trim(),
+                        "General",
+                        cantidad,
+                        "Unidades",
+                        minimo,
+                        "Almacén",
+                        estado,
+                        imagenUrl.trim().takeIf { it.isNotBlank() }
+                    )
 
-                    cantidad.toIntOrNull() == null ->
-                        mensajeError = errorCantidad
+                    mensajeExito = registroExitoso
 
-                    minimo.toIntOrNull() == null ->
-                        mensajeError = errorMinimo
-
-                    imagenUrl.isNotBlank() &&
-                            !imagenUrl.startsWith("https://") &&
-                            !imagenUrl.startsWith("http://") ->
-                        mensajeError = errorUrl
-
-                    else -> {
-                        val cant = cantidad.toInt()
-                        val min = minimo.toInt()
-
-                        viewModel.registrarNuevoInsumo(
-                            id.trim(),
-                            nombre.trim(),
-                            descripcion.trim(),
-                            "General",
-                            cantidad,
-                            "Unidades",
-                            minimo,
-                            "Almacén",
-                            estado,
-                            imagenUrl.trim().takeIf { it.isNotBlank() }
+                    if (cant <= min) {
+                        notificationHelper.mostrarNotificacion(
+                            tituloNotificacion,
+                            mensajeNotificacion
                         )
-
-                        mensajeExito = registroExitoso
-
-                        if (cant <= min) {
-                            notificationHelper.mostrarNotificacion(
-                                tituloNotificacion,
-                                mensajeNotificacion
-                            )
-                        }
-
-                        id = ""
-                        nombre = ""
-                        descripcion = ""
-                        cantidad = ""
-                        minimo = ""
-                        estado = "ACTIVO"
-                        imagenUrl = ""
                     }
+
+                    id = ""
+                    nombre = ""
+                    descripcion = ""
+                    cantidad = ""
+                    minimo = ""
+                    estado = "ACTIVO"
+                    imagenUrl = ""
+                    intentoGuardar = false
                 }
             },
             modifier = Modifier.fillMaxWidth()

@@ -30,6 +30,7 @@
     <string name="error_minimo">Enter a valid minimum stock.</string>
     <string name="error_estado">Status is required.</string>
     <string name="error_url_imagen">The image URL must start with http:// or https://.</string>
+    <string name="validacion_campos_error">Check the fields marked in red before saving.</string>
     <string name="registro_exitoso">Supply registered successfully.</string>
     <string name="error_carga_imagen">Could not load image</string>
     <string name="sin_imagen">No image available</string>

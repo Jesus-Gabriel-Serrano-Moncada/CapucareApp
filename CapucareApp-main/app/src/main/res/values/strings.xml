@@ -30,6 +30,7 @@
     <string name="error_minimo">Ingresa un stock mínimo válido.</string>
     <string name="error_estado">El estado es obligatorio.</string>
     <string name="error_url_imagen">La URL de imagen debe comenzar con http:// o https://.</string>
+    <string name="validacion_campos_error">Revisa los campos marcados en rojo antes de guardar.</string>
     <string name="registro_exitoso">Insumo registrado correctamente.</string>
     <string name="error_carga_imagen">No se pudo cargar la imagen</string>
     <string name="sin_imagen">Sin imagen disponible</string>
